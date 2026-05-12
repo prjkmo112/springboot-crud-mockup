@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: main-api
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: rootpasswd
+    pool-size: 100
+
+  jpa:
+    open-in-view: true
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    url: /api-docs
