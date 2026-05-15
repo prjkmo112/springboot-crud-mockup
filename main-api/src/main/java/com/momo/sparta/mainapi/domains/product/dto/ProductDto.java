@@ -16,4 +16,6 @@ public class ProductDto extends BaseDtEntityDto {
 
     private Integer price;
 
+    private Integer stock;
+
 }

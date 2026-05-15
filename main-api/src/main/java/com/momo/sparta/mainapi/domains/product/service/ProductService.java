@@ -64,6 +64,7 @@ public class ProductService {
         Product product = getProductEntityByProductKey(productDto.getProductKey());
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
+        product.setStock(productDto.getStock());
         product.setModifiedAt(LocalDateTime.now());
 
         return ProductMapper.INSTANCE.toDto(product);

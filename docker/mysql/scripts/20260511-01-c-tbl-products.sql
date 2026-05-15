@@ -5,10 +5,11 @@ create table products
     product_key varchar(64)                                                    not null,
     name        varchar(200)                                                   not null,
     price       int                                                            not null,
+    stock       int                                                            not null,
     created_at  datetime default CURRENT_TIMESTAMP                             not null,
     modified_at datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP null,
 
-    constraint products_pk
+    constraint uk_products_product_key
         unique (product_key)
 )
     ENGINE = InnoDB

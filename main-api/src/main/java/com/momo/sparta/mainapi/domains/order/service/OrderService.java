@@ -5,6 +5,7 @@ import com.momo.sparta.commonmysqldb.entity.Product;
 import com.momo.sparta.commonmysqldb.repository.OrderRepository;
 import com.momo.sparta.commonmysqldb.repository.ProductRepository;
 import com.momo.sparta.mainapi.common.dto.DBListDto;
+import com.momo.sparta.mainapi.domains.order.dto.CreateOrderDto;
 import com.momo.sparta.mainapi.domains.order.dto.OrderDto;
 import com.momo.sparta.mainapi.domains.order.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -54,37 +55,28 @@ public class OrderService {
                 .build();
     }
 
-    public OrderDto createOrder(OrderDto orderDto) {
-        Product product = productRepository.findByProductKey(orderDto.getProductKey())
+    @Transactional
+    public OrderDto createOrder(CreateOrderDto createOrderDto) {
+        Product product = productRepository.findByProductKey(createOrderDto.getProductKey())
                 .orElseThrow(() -> {
-                    log.warn("product not found (productKey: {})", orderDto.getProductKey());
+                    log.warn("product not found (productKey: {})", createOrderDto.getProductKey());
                     return new IllegalArgumentException("product not found");
                 });
 
-        Order order = OrderMapper.INSTANCE.fromDto(orderDto);
+        if (product.getStock() <= 0) {
+            log.warn("product out of stock (productKey: {})", createOrderDto.getProductKey());
+            throw new IllegalStateException("product out of stock");
+        }
+
+        Order order = OrderMapper.INSTANCE.fromDto(createOrderDto);
         order.setId(null);
+        product.setStock(product.getStock() - 1);
         order.setCreatedAt(LocalDateTime.now());
         order.setModifiedAt(null);
 
         Order savedOrder = orderRepository.save(order);
         savedOrder.setProduct(product);
         return OrderMapper.INSTANCE.toDto(savedOrder);
-    }
-
-    @Transactional
-    public OrderDto updateOrder(OrderDto orderDto) {
-        Product product = productRepository.findByProductKey(orderDto.getProductKey())
-                .orElseThrow(() -> {
-                    log.warn("product not found (productKey: {})", orderDto.getProductKey());
-                    return new IllegalArgumentException("product not found");
-                });
-
-        Order order = getOrderEntityByOrderKey(orderDto.getOrderKey());
-        order.setProductKey(orderDto.getProductKey());
-        order.setProduct(product);
-        order.setModifiedAt(LocalDateTime.now());
-
-        return OrderMapper.INSTANCE.toDto(order);
     }
 
     @Transactional

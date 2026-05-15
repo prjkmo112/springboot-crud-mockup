@@ -1,6 +1,7 @@
 package com.momo.sparta.mainapi.domains.order.mapper;
 
 import com.momo.sparta.commonmysqldb.entity.Order;
+import com.momo.sparta.mainapi.domains.order.dto.CreateOrderDto;
 import com.momo.sparta.mainapi.domains.order.dto.OrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,5 +16,7 @@ public interface OrderMapper {
     OrderDto toDto(Order order);
 
     Order fromDto(OrderDto orderDto);
+
+    Order fromDto(CreateOrderDto createOrderDto);
 
 }

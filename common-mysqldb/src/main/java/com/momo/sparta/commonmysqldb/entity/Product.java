@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,6 +47,9 @@ public class Product {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
+    @NotNull
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
 
 
 }

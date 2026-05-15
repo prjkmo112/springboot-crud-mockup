@@ -1,6 +1,7 @@
 package com.momo.sparta.mainapi.domains.order.controller;
 
 import com.momo.sparta.mainapi.common.dto.DBListDto;
+import com.momo.sparta.mainapi.domains.order.dto.CreateOrderDto;
 import com.momo.sparta.mainapi.domains.order.dto.OrderDto;
 import com.momo.sparta.mainapi.domains.order.service.OrderService;
 import jakarta.validation.Valid;
@@ -10,7 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,13 +36,8 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public OrderDto createOrder(@RequestBody @Valid OrderDto orderDto) {
-        return orderService.createOrder(orderDto);
-    }
-
-    @PutMapping("/update")
-    public OrderDto updateOrder(@RequestBody @Valid OrderDto orderDto) {
-        return orderService.updateOrder(orderDto);
+    public OrderDto createOrder(@RequestBody @Valid CreateOrderDto createOrderDto) {
+        return orderService.createOrder(createOrderDto);
     }
 
     @DeleteMapping("/delete")
