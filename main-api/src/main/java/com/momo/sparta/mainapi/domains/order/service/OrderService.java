@@ -27,17 +27,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
-    private Order getOrderEntityByOrderKey(String orderKey) {
-        return orderRepository.findByOrderKey(orderKey)
+    @Transactional(readOnly = true)
+    public OrderDto getOrderItem(String orderKey) {
+        Order order = orderRepository.findByOrderKeyWithProduct(orderKey)
                 .orElseThrow(() -> {
                     log.warn("order not found (orderKey: {})", orderKey);
                     return new IllegalArgumentException("order not found");
                 });
-    }
 
-    @Transactional(readOnly = true)
-    public OrderDto getOrderItem(String orderKey) {
-        Order order = getOrderEntityByOrderKey(orderKey);
         return OrderMapper.INSTANCE.toDto(order);
     }
 
@@ -81,7 +78,12 @@ public class OrderService {
 
     @Transactional
     public void deleteOrder(String orderKey) {
-        Order order = getOrderEntityByOrderKey(orderKey);
+        Order order = orderRepository.findByOrderKey(orderKey)
+                .orElseThrow(() -> {
+                    log.warn("order not found (orderKey: {})", orderKey);
+                    return new IllegalArgumentException("order not found");
+                });
+
         orderRepository.delete(order);
     }
 
