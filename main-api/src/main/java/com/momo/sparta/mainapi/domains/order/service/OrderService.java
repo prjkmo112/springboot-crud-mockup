@@ -8,6 +8,7 @@ import com.momo.sparta.mainapi.common.dto.DBListDto;
 import com.momo.sparta.mainapi.domains.order.dto.CreateOrderDto;
 import com.momo.sparta.mainapi.domains.order.dto.OrderDto;
 import com.momo.sparta.mainapi.domains.order.mapper.OrderMapper;
+import com.momo.sparta.mainapi.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class OrderService {
         Order order = orderRepository.findByOrderKeyWithProduct(orderKey)
                 .orElseThrow(() -> {
                     log.warn("order not found (orderKey: {})", orderKey);
-                    return new IllegalArgumentException("order not found");
+                    return new ApiException("order not found");
                 });
 
         return OrderMapper.INSTANCE.toDto(order);
@@ -57,12 +58,12 @@ public class OrderService {
         Product product = productRepository.findByProductKey(createOrderDto.getProductKey())
                 .orElseThrow(() -> {
                     log.warn("product not found (productKey: {})", createOrderDto.getProductKey());
-                    return new IllegalArgumentException("product not found");
+                    return new ApiException("product not found");
                 });
 
         if (product.getStock() <= 0) {
             log.warn("product out of stock (productKey: {})", createOrderDto.getProductKey());
-            throw new IllegalStateException("product out of stock");
+            throw new ApiException("product out of stock");
         }
 
         Order order = OrderMapper.INSTANCE.fromDto(createOrderDto);
@@ -81,7 +82,7 @@ public class OrderService {
         Order order = orderRepository.findByOrderKey(orderKey)
                 .orElseThrow(() -> {
                     log.warn("order not found (orderKey: {})", orderKey);
-                    return new IllegalArgumentException("order not found");
+                    return new ApiException("order not found");
                 });
 
         orderRepository.delete(order);

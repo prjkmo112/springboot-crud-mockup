@@ -18,6 +18,17 @@ spring:
       hibernate:
         format_sql: true
 
+service:
+  url: https://your-real-server-domain.com
+
+jwt:
+  # you should change this
+  # openssl rand -hex 64
+  secret: f9b8a1e362cacea786f04e25009532da7651991d0c65a0977ad66c1edc3d3e01fa0431cbbaf59adbd3172ad21c3a4f6883e9e8764d02d6be934924dd89c17e21
+  expiration: 5000
+  issuer: momo
+  subject_seperator: ","
+
 springdoc:
   api-docs:
     enabled: true

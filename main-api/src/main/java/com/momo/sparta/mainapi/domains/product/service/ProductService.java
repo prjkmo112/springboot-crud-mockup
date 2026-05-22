@@ -5,6 +5,7 @@ import com.momo.sparta.commonmysqldb.repository.ProductRepository;
 import com.momo.sparta.mainapi.common.dto.DBListDto;
 import com.momo.sparta.mainapi.domains.product.dto.ProductDto;
 import com.momo.sparta.mainapi.domains.product.mapper.ProductMapper;
+import com.momo.sparta.mainapi.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public class ProductService {
         return productRepository.findByProductKey(productKey)
                 .orElseThrow(() -> {
                     log.warn("product not found (productKey: {})", productKey);
-                    return new IllegalArgumentException("product not found");
+                    return new ApiException("product not found");
                 });
     }
 
